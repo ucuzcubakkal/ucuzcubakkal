@@ -1,0 +1,106 @@
+{
+  "name": "Ucuzcubakkal — Pi Network E-Ticaret",
+  "short_name": "Ucuzcubakkal",
+  "description": "Pi topluluğu için global e-ticaret platformu. El sanatları, özgün tasarımlar ve yerel üreticileri Pi ile buluşturuyoruz.",
+  "start_url": "/?source=pwa",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#F27A1A",
+  "lang": "tr",
+  "dir": "ltr",
+  "scope": "/",
+  "id": "ucuzcubakkal-pi-app",
+  "categories": ["shopping", "lifestyle", "business"],
+  "icons": [
+    {
+      "src": "/icon-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tum Kategoriler",
+      "short_name": "Kategoriler",
+      "description": "Tum urun kategorilerini goruntule",
+      "url": "/kategoriler",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Sepetim",
+      "short_name": "Sepet",
+      "description": "Alisveris sepetine git",
+      "url": "/sepet",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Satici Ol",
+      "short_name": "Satici Ol",
+      "description": "Pi Network'te satis yapmaya basla",
+      "url": "/basvuru",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96", "type": "image/png" }]
+    },
+    {
+      "name": "Siparis Takibi",
+      "short_name": "Takip",
+      "description": "Siparisini anlık takip et",
+      "url": "/takip",
+      "icons": [{ "src": "/icon-96.png", "sizes": "96x96", "type": "image/png" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Ana Sayfa — Ucuzcubakkal"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
