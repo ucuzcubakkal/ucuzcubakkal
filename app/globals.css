@@ -1,0 +1,293 @@
+/* ============================================================
+   CROSS-BROWSER COMPATIBILITY
+   Supports: Web3 DApps (Pi Browser, MetaMask), Mobile (iOS/Android),
+   Web2 (Chrome, Firefox, Safari, Edge), Legacy (IE11+)
+   ============================================================ */
+
+/* IE11: CSS Custom Properties fallback (IE doesn't support vars) */
+/* These raw color values mirror the :root tokens below */
+:root {
+  /* IE11-safe hex fallbacks declared before tailwind processes vars */
+  --ie-primary: #1e3a8a;
+  --ie-background: #f5f6f9;
+  --ie-foreground: #111827;
+  --ie-border: #dde2ec;
+  --ie-card: #ffffff;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Background & surface */
+    --background: 220 20% 97%;
+    --foreground: 224 40% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 224 40% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 40% 12%;
+
+    /* Primary — Lacivert (Pi Network uyumlu koyu lacivert) */
+    --primary: 224 64% 28%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary — açık lacivert tonu */
+    --secondary: 220 30% 94%;
+    --secondary-foreground: 224 40% 20%;
+
+    /* Muted */
+    --muted: 220 20% 94%;
+    --muted-foreground: 220 10% 46%;
+
+    /* Accent — Turuncu/Altın (CTA: Satın Al, Sepete Ekle) */
+    --accent: 36 100% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border / Input / Ring */
+    --border: 220 20% 88%;
+    --input: 220 20% 88%;
+    --ring: 224 64% 28%;
+    --radius: 0.5rem;
+
+    /* Custom tokens */
+    --flash: 0 84% 55%;
+    --flash-foreground: 0 0% 100%;
+    /* Satıcı doğrulama rozeti — mavi tik */
+    --seller-badge: 211 100% 50%;
+    /* CTA vurgu rengi ayrı token olarak */
+    --cta: 36 100% 50%;
+    --cta-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    --background: 224 30% 8%;
+    --foreground: 220 20% 95%;
+    --card: 224 25% 11%;
+    --card-foreground: 220 20% 95%;
+    --popover: 224 25% 11%;
+    --popover-foreground: 220 20% 95%;
+    --primary: 220 70% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 224 20% 16%;
+    --secondary-foreground: 220 20% 85%;
+    --muted: 224 20% 16%;
+    --muted-foreground: 220 10% 55%;
+    --accent: 36 100% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 224 20% 20%;
+    --input: 224 20% 20%;
+    --ring: 220 70% 55%;
+    --flash: 0 84% 55%;
+    --flash-foreground: 0 0% 100%;
+    --seller-badge: 211 100% 60%;
+    --cta: 36 100% 50%;
+    --cta-foreground: 0 0% 100%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar but keep scroll functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+  .animate-slide-in-right {
+    animation: slideInRight 0.3s ease-out;
+  }
+  .page-transition {
+    animation: pageIn 0.35s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   MOBILE OPTIMIZATIONS (iOS Safari, Android WebView, Pi Browser)
+   ============================================================ */
+html {
+  /* Prevent font size inflation on iOS orientation change */
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Smooth scrolling for all environments */
+  scroll-behavior: smooth;
+}
+
+body {
+  /* iOS momentum scrolling */
+  -webkit-overflow-scrolling: touch;
+  /* Prevent horizontal overflow on mobile */
+  overflow-x: hidden;
+  /* Improve text rendering on all platforms */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Touch targets — minimum 44x44px for all interactive elements (WCAG 2.5.5) */
+button, a, [role="button"], input[type="submit"], input[type="button"] {
+  min-height: 44px;
+  /* Disable tap highlight on mobile WebView / Pi Browser */
+  -webkit-tap-highlight-color: transparent;
+  /* iOS active state */
+  touch-action: manipulation;
+}
+
+/* Input zoom prevention on iOS Safari (font-size >= 16px) */
+input, select, textarea {
+  font-size: 16px;
+  /* IE10+ */
+  -ms-overflow-style: scrollbar;
+}
+
+@media (min-width: 768px) {
+  input, select, textarea {
+    font-size: 14px;
+  }
+}
+
+/* ============================================================
+   IE11 COMPATIBILITY SHIMS
+   ============================================================ */
+
+/* IE11: Flexbox gap polyfill via margin */
+@supports not (gap: 1rem) {
+  .flex > * + * {
+    margin-left: 0.5rem;
+  }
+  .flex-col > * + * {
+    margin-left: 0;
+    margin-top: 0.5rem;
+  }
+}
+
+/* IE11: grid fallback — single column */
+@supports not (display: grid) {
+  .grid {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+  .grid > * {
+    -ms-flex: 0 0 100%;
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* IE11: backdrop-filter fallback */
+@supports not (backdrop-filter: blur(8px)) {
+  .backdrop-blur-md, .backdrop-blur-sm, .backdrop-blur-lg {
+    background-color: rgba(255,255,255,0.97) !important;
+  }
+  .dark .backdrop-blur-md, .dark .backdrop-blur-sm, .dark .backdrop-blur-lg {
+    background-color: rgba(20,20,20,0.97) !important;
+  }
+}
+
+/* IE11: CSS custom property fallback for primary color */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  .bg-primary    { background-color: #1e3a8a; }
+  .text-primary  { color: #1e3a8a; }
+  .border-primary { border-color: #1e3a8a; }
+  .bg-background { background-color: #f5f6f9; }
+  .text-foreground { color: #111827; }
+  .bg-card       { background-color: #ffffff; }
+  .border-border  { border-color: #dde2ec; }
+  .text-muted-foreground { color: #6b7280; }
+  .bg-destructive { background-color: #dc2626; }
+}
+
+/* ============================================================
+   WEB3 / DAPP ENVIRONMENT TWEAKS
+   Pi Browser, MetaMask Mobile, WalletConnect WebView
+   ============================================================ */
+
+/* Pi Browser safe area insets */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Disable user-select on wallet interaction elements */
+.wallet-btn, [data-wallet] {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* ============================================================
+   PRINT STYLES (order confirmations, receipts)
+   ============================================================ */
+@media print {
+  .no-print, nav, header, footer, .bottom-nav, [data-bottomnav] {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  a { text-decoration: underline; }
+  .print-break { page-break-before: always; }
+}
+
+/* ============================================================
+   HIGH CONTRAST MODE (Windows / accessibility)
+   ============================================================ */
+@media (forced-colors: active) {
+  .bg-primary { background-color: ButtonText; }
+  .text-primary { color: ButtonText; }
+  button { border: 2px solid ButtonText; }
+  a { color: LinkText; }
+}
