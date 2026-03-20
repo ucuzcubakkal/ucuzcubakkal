@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ucuzcubakkal — Pi Network topluluğu için global e-ticaret platformu. El sanatları, organik ürünler, elektronik ve daha fazlası." />
+  <title>Ucuzcubakkal — Pi ile Alışverişin Yeni Adresi</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'sans-serif'] },
+          colors: {
+            primary:   { DEFAULT: '#1e3a8a', foreground: '#ffffff' },
+            accent:    { DEFAULT: '#f59e0b', foreground: '#ffffff' },
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f5f6f9; color: #111827; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; }
+
+    /* scrollbar gizle */
+    .scroll-hide::-webkit-scrollbar { display: none; }
+    .scroll-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* animasyonlar */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+    @keyframes countdown { from { width: 100%; } to { width: 0%; } }
+
+    .fade-in { animation: fadeIn .4s ease-out both; }
+    .ticker-track { animation: ticker 28s linear infinite; white-space: nowrap; }
+    .pulse-dot { animation: pulse 1.5s ease-in-out infinite; }
+
+    /* Hero carousel */
+    .hero-slide { position: absolute; inset: 0; transition: opacity .5s ease; }
+    .hero-slide.active { opacity: 1; z-index: 10; }
+    .hero-slide.inactive { opacity: 0; z-index: 0; }
+
+    /* Kart hover */
+    .product-card { transition: transform .2s ease, box-shadow .2s ease; }
+    .product-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+
+    /* Yıldız */
+    .star-filled { color: #f59e0b; }
+    .star-empty  { color: #d1d5db; }
+
+    /* Rozet renkleri */
+    .badge-flash    { background: #dc2626; color: #fff; }
+    .badge-yeni     { background: #2563eb; color: #fff; }
+    .badge-indirim  { background: #16a34a; color: #fff; }
+    .badge-cok-satan{ background: #7c3aed; color: #fff; }
+
+    /* Bottom nav */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: #fff; border-top: 1px solid #e5e7eb; padding-bottom: env(safe-area-inset-bottom, 0); }
+
+    /* Pi butonu gradient */
+    .pi-btn { background: linear-gradient(135deg, #f59e0b, #d97706); }
+    .pi-btn:hover { background: linear-gradient(135deg, #d97706, #b45309); }
+
+    /* Mobil - extra bottom padding */
+    @media (max-width: 767px) {
+      .main-content { padding-bottom: 80px; }
+    }
+
+    /* İnce çizgi timer */
+    .flash-timer { height: 3px; background: #dc2626; animation: countdown 10s linear infinite; border-radius: 2px; }
+
+    .search-wrap:focus-within { box-shadow: 0 0 0 3px rgba(30,58,138,.25); }
+
+    /* Cart badge */
+    .cart-badge { position: absolute; top: -6px; right: -6px; background: #dc2626; color: #fff; font-size: 10px; font-weight: 700; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  </style>
+</head>
+
+<body class="bg-gray-50">
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header class="sticky top-0 z-40 bg-white border-b border-gray-200 shadow-sm">
+  <!-- Üst bar: Logo + Arama + Aksiyonlar -->
+  <div class="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+
+    <!-- Logo -->
+    <a href="/" class="flex-shrink-0 flex items-center gap-2 text-decoration-none">
+      <div class="w-9 h-9 rounded-xl bg-[#1e3a8a] flex items-center justify-center">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+      </div>
+      <div class="hidden sm:block">
+        <span class="font-black text-[#1e3a8a] text-lg leading-none block">Ucuzcubakkal</span>
+        <span class="text-[10px] text-gray-400 font-medium leading-none">Pi ile Alışveriş</span>
+      </div>
+    </a>
+
+    <!-- Arama -->
+    <div class="flex-1 search-wrap rounded-xl border border-gray-200 flex items-center bg-gray-50 overflow-hidden transition-all">
+      <span class="pl-3 text-gray-400">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </span>
+      <input id="searchInput" type="text" placeholder="Ürün, kategori veya marka ara..." class="flex-1 bg-transparent py-2.5 px-2.5 text-sm outline-none placeholder-gray-400" />
+      <button onclick="doSearch()" class="bg-[#1e3a8a] text-white px-4 py-2.5 text-sm font-semibold hover:bg-blue-800 transition-colors">Ara</button>
+    </div>
+
+    <!-- Aksiyonlar -->
+    <div class="flex items-center gap-1">
+      <!-- Favoriler -->
+      <button class="relative p-2.5 rounded-xl hover:bg-gray-100 transition-colors hidden sm:flex items-center justify-center" aria-label="Favoriler">
+        <svg width="20" height="20" fill="none" stroke="#1e3a8a" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </button>
+
+      <!-- Sepet -->
+      <button onclick="toggleCart()" class="relative p-2.5 rounded-xl hover:bg-gray-100 transition-colors flex items-center justify-center" aria-label="Sepet">
+        <svg width="20" height="20" fill="none" stroke="#1e3a8a" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span id="cartBadge" class="cart-badge hidden">0</span>
+      </button>
+
+      <!-- Giriş -->
+      <a href="/giris" class="hidden sm:flex items-center gap-1.5 bg-[#1e3a8a] text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-blue-800 transition-colors ml-1">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Giriş
+      </a>
+    </div>
+  </div>
+
+  <!-- Kategori nav — yatay kaydırmalı -->
+  <div class="border-t border-gray-100">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center gap-1 overflow-x-auto scroll-hide py-2">
+        <button onclick="filterCategory('tumu')" data-cat="tumu" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-[#1e3a8a] whitespace-nowrap">
+          Tümü
+        </button>
+        <button onclick="filterCategory('el-sanatlari')" data-cat="el-sanatlari" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-amber-50 hover:text-amber-700 whitespace-nowrap transition-colors">🏺 El Sanatları</button>
+        <button onclick="filterCategory('giyim')" data-cat="giyim" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-rose-50 hover:text-rose-700 whitespace-nowrap transition-colors">👗 Giyim</button>
+        <button onclick="filterCategory('elektronik')" data-cat="elektronik" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-blue-50 hover:text-blue-700 whitespace-nowrap transition-colors">📱 Elektronik</button>
+        <button onclick="filterCategory('ev-yasam')" data-cat="ev-yasam" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-orange-50 hover:text-orange-700 whitespace-nowrap transition-colors">🏠 Ev & Yaşam</button>
+        <button onclick="filterCategory('organik')" data-cat="organik" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-green-50 hover:text-green-700 whitespace-nowrap transition-colors">🌿 Organik</button>
+        <button onclick="filterCategory('mucevher')" data-cat="mucevher" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-yellow-50 hover:text-yellow-700 whitespace-nowrap transition-colors">💎 Mücevher</button>
+        <button onclick="filterCategory('spor')" data-cat="spor" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-cyan-50 hover:text-cyan-700 whitespace-nowrap transition-colors">💪 Spor</button>
+        <button onclick="filterCategory('kitap')" data-cat="kitap" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-violet-50 hover:text-violet-700 whitespace-nowrap transition-colors">📚 Kitap</button>
+        <button onclick="filterCategory('ozel')" data-cat="ozel" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-fuchsia-50 hover:text-fuchsia-700 whitespace-nowrap transition-colors">✨ Özel Tasarım</button>
+        <button onclick="filterCategory('bebek')" data-cat="bebek" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-pink-50 hover:text-pink-700 whitespace-nowrap transition-colors">👶 Bebek</button>
+        <button onclick="filterCategory('market')" data-cat="market" class="cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-gray-600 hover:bg-teal-50 hover:text-teal-700 whitespace-nowrap transition-colors">🛒 Süpermarket</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════ DUYURU BANTi ═══════════════════ -->
+<div class="bg-[#1e3a8a] text-white text-xs py-2 overflow-hidden">
+  <div class="ticker-track inline-flex gap-16">
+    <span>🎉 500π üzeri alışverişlerde ücretsiz kargo</span>
+    <span>⚡ Flaş indirimler her gün 20:00'de başlıyor</span>
+    <span>🔐 Pi ağı ile güvenli ödeme</span>
+    <span>🌍 150+ ülkeye teslimat</span>
+    <span>✅ Doğrulanmış satıcılar</span>
+    <span>💎 El yapımı & özgün ürünler</span>
+    <span>🎉 500π üzeri alışverişlerde ücretsiz kargo</span>
+    <span>⚡ Flaş indirimler her gün 20:00'de başlıyor</span>
+    <span>🔐 Pi ağı ile güvenli ödeme</span>
+    <span>🌍 150+ ülkeye teslimat</span>
+    <span>✅ Doğrulanmış satıcılar</span>
+    <span>💎 El yapımı & özgün ürünler</span>
+  </div>
+</div>
+
+<!-- ═══════════════════ ANA İÇERİK ═══════════════════ -->
+<main class="main-content max-w-7xl mx-auto px-4 py-4 space-y-8">
+
+  <!-- ── HERO CAROUSEL ── -->
+  <section aria-label="Öne çıkan kampanyalar">
+    <div id="heroCarousel" class="relative rounded-2xl overflow-hidden select-none" style="min-height:220px; height: clamp(220px, 40vw, 420px);">
+
+      <!-- Slide 1 -->
+      <div class="hero-slide active" style="background: linear-gradient(135deg,#b45309,#92400e);" data-index="0">
+        <img src="https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=900&q=80" alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-20" />
+        <div class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div class="absolute inset-x-0 bottom-0 p-5 sm:p-8 z-10">
+          <span class="inline-block bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 backdrop-blur-sm">Yeni Koleksiyon</span>
+          <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight mb-1">Handmade Seramik</h2>
+          <p class="text-sm text-white/80 mb-4">El emeği, göz nuru — Her parça biricik</p>
+          <a href="#urunler" class="inline-flex items-center gap-2 bg-white text-gray-900 font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-white/90 transition-colors">
+            Koleksiyonu Keşfet
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="hero-slide inactive" style="background: linear-gradient(135deg,#15803d,#166534);" data-index="1">
+        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=900&q=80" alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-20" />
+        <div class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div class="absolute inset-x-0 bottom-0 p-5 sm:p-8 z-10">
+          <span class="inline-block bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 backdrop-blur-sm">2025 Sezonu</span>
+          <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight mb-1">Doğal & Organik</h2>
+          <p class="text-sm text-white/80 mb-4">Sertifikalı üreticilerden taze ürünler</p>
+          <a href="#urunler" class="inline-flex items-center gap-2 bg-white text-gray-900 font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-white/90 transition-colors">
+            Hemen Sipariş Ver
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="hero-slide inactive" style="background: linear-gradient(135deg,#0369a1,#1e3a5f);" data-index="2">
+        <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=900&q=80" alt="" aria-hidden="true" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-20" />
+        <div class="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/60 to-transparent"></div>
+        <div class="absolute inset-x-0 bottom-0 p-5 sm:p-8 z-10">
+          <span class="inline-block bg-white/20 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full mb-2 backdrop-blur-sm">Geleneksel Sanat</span>
+          <h2 class="text-2xl sm:text-4xl font-black text-white leading-tight mb-1">El Dokuma Kilimler</h2>
+          <p class="text-sm text-white/80 mb-4">Anadolu'nun renkleri evinize taşıyor</p>
+          <a href="#urunler" class="inline-flex items-center gap-2 bg-white text-gray-900 font-bold px-5 py-2.5 rounded-xl text-sm hover:bg-white/90 transition-colors">
+            Keşfet
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Önceki / Sonraki -->
+      <button onclick="heroNav(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 z-20 hidden sm:flex h-9 w-9 rounded-full bg-black/30 hover:bg-black/50 items-center justify-center backdrop-blur-sm transition-colors" aria-label="Önceki">
+        <svg width="18" height="18" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button onclick="heroNav(1)" class="absolute right-3 top-1/2 -translate-y-1/2 z-20 hidden sm:flex h-9 w-9 rounded-full bg-black/30 hover:bg-black/50 items-center justify-center backdrop-blur-sm transition-colors" aria-label="Sonraki">
+        <svg width="18" height="18" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+
+      <!-- Noktalar -->
+      <div id="heroDots" class="absolute bottom-4 right-5 z-20 flex gap-1.5">
+        <button onclick="heroGoTo(0)" class="hero-dot rounded-full w-6 h-1.5 bg-white transition-all"></button>
+        <button onclick="heroGoTo(1)" class="hero-dot rounded-full w-1.5 h-1.5 bg-white/40 transition-all"></button>
+        <button onclick="heroGoTo(2)" class="hero-dot rounded-full w-1.5 h-1.5 bg-white/40 transition-all"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 4 AVANTAJ KUTUSU ── -->
+  <section class="grid grid-cols-2 sm:grid-cols-4 gap-3" aria-label="Platform avantajları">
+    <div class="bg-white rounded-xl p-3.5 flex items-center gap-3 border border-gray-100 shadow-sm">
+      <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
+        <svg width="20" height="20" fill="none" stroke="#1e3a8a" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-gray-800">Ücretsiz Kargo</p>
+        <p class="text-[11px] text-gray-500">500π üzeri</p>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3.5 flex items-center gap-3 border border-gray-100 shadow-sm">
+      <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center flex-shrink-0">
+        <svg width="20" height="20" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-gray-800">Güvenli Ödeme</p>
+        <p class="text-[11px] text-gray-500">Pi Network</p>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3.5 flex items-center gap-3 border border-gray-100 shadow-sm">
+      <div class="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center flex-shrink-0">
+        <svg width="20" height="20" fill="none" stroke="#ea580c" stroke-width="2" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-gray-800">Kolay İade</p>
+        <p class="text-[11px] text-gray-500">30 gün içinde</p>
+      </div>
+    </div>
+    <div class="bg-white rounded-xl p-3.5 flex items-center gap-3 border border-gray-100 shadow-sm">
+      <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0">
+        <svg width="20" height="20" fill="none" stroke="#d97706" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div>
+        <p class="text-xs font-bold text-gray-800">7/24 Destek</p>
+        <p class="text-[11px] text-gray-500">Her zaman yanında</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── KATEGORİLER ── -->
+  <section aria-labelledby="cat-heading">
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="cat-heading" class="text-xl font-black text-gray-900">Kategoriler</h2>
+      <a href="#urunler" class="text-sm text-[#1e3a8a] font-semibold flex items-center gap-1 hover:underline">
+        Tümü
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-11 gap-3">
+      <button onclick="filterCategory('el-sanatlari')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-amber-50 hover:ring-2 ring-amber-200 transition-all group">
+        <span class="text-2xl">🏺</span>
+        <span class="text-[11px] font-semibold text-amber-700 text-center leading-tight">El Sanatları</span>
+      </button>
+      <button onclick="filterCategory('giyim')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-rose-50 hover:ring-2 ring-rose-200 transition-all">
+        <span class="text-2xl">👗</span>
+        <span class="text-[11px] font-semibold text-rose-700 text-center leading-tight">Giyim</span>
+      </button>
+      <button onclick="filterCategory('elektronik')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-blue-50 hover:ring-2 ring-blue-200 transition-all">
+        <span class="text-2xl">📱</span>
+        <span class="text-[11px] font-semibold text-blue-700 text-center leading-tight">Elektronik</span>
+      </button>
+      <button onclick="filterCategory('ev-yasam')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-orange-50 hover:ring-2 ring-orange-200 transition-all">
+        <span class="text-2xl">🏠</span>
+        <span class="text-[11px] font-semibold text-orange-700 text-center leading-tight">Ev & Yaşam</span>
+      </button>
+      <button onclick="filterCategory('organik')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-green-50 hover:ring-2 ring-green-200 transition-all">
+        <span class="text-2xl">🌿</span>
+        <span class="text-[11px] font-semibold text-green-700 text-center leading-tight">Organik</span>
+      </button>
+      <button onclick="filterCategory('mucevher')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-yellow-50 hover:ring-2 ring-yellow-200 transition-all">
+        <span class="text-2xl">💎</span>
+        <span class="text-[11px] font-semibold text-yellow-700 text-center leading-tight">Mücevher</span>
+      </button>
+      <button onclick="filterCategory('spor')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-cyan-50 hover:ring-2 ring-cyan-200 transition-all">
+        <span class="text-2xl">💪</span>
+        <span class="text-[11px] font-semibold text-cyan-700 text-center leading-tight">Spor</span>
+      </button>
+      <button onclick="filterCategory('kitap')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-violet-50 hover:ring-2 ring-violet-200 transition-all">
+        <span class="text-2xl">📚</span>
+        <span class="text-[11px] font-semibold text-violet-700 text-center leading-tight">Kitap</span>
+      </button>
+      <button onclick="filterCategory('ozel')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-fuchsia-50 hover:ring-2 ring-fuchsia-200 transition-all">
+        <span class="text-2xl">✨</span>
+        <span class="text-[11px] font-semibold text-fuchsia-700 text-center leading-tight">Özel Tasarım</span>
+      </button>
+      <button onclick="filterCategory('bebek')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-pink-50 hover:ring-2 ring-pink-200 transition-all">
+        <span class="text-2xl">👶</span>
+        <span class="text-[11px] font-semibold text-pink-700 text-center leading-tight">Bebek</span>
+      </button>
+      <button onclick="filterCategory('market')" class="flex flex-col items-center gap-2 p-3 rounded-xl bg-teal-50 hover:ring-2 ring-teal-200 transition-all">
+        <span class="text-2xl">🛒</span>
+        <span class="text-[11px] font-semibold text-teal-700 text-center leading-tight">Süpermarket</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ── FLAŞ İNDİRİM ── -->
+  <section aria-labelledby="flash-heading">
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-red-500 flex items-center justify-center">
+          <svg width="16" height="16" fill="white" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h2 id="flash-heading" class="text-xl font-black text-gray-900">Flaş İndirim</h2>
+        <span class="pulse-dot w-2 h-2 rounded-full bg-red-500 inline-block"></span>
+      </div>
+      <span class="text-xs text-gray-500 font-medium">Günlük kampanya</span>
+    </div>
+    <div class="flash-timer mb-4 bg-gray-200 rounded-full overflow-hidden">
+      <div class="flash-timer"></div>
+    </div>
+    <div id="flashGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3"></div>
+  </section>
+
+  <!-- ── ÖNE ÇIKAN ÜRÜNLER ── -->
+  <section id="urunler" aria-labelledby="featured-heading">
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="featured-heading" class="text-xl font-black text-gray-900">
+        <span id="sectionTitle">Öne Çıkan Ürünler</span>
+      </h2>
+      <!-- Sıralama -->
+      <select id="sortSelect" onchange="applySort()" class="text-xs border border-gray-200 rounded-lg px-3 py-2 bg-white text-gray-600 outline-none cursor-pointer">
+        <option value="default">Varsayılan</option>
+        <option value="price-asc">Fiyat: Düşük → Yüksek</option>
+        <option value="price-desc">Fiyat: Yüksek → Düşük</option>
+        <option value="rating">En Yüksek Puan</option>
+        <option value="reviews">En Çok Yorum</option>
+      </select>
+    </div>
+    <div id="productsGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-4"></div>
+    <div class="mt-6 text-center">
+      <button id="loadMoreBtn" onclick="loadMore()" class="px-8 py-3 border-2 border-[#1e3a8a] text-[#1e3a8a] font-bold rounded-xl hover:bg-[#1e3a8a] hover:text-white transition-colors text-sm">
+        Daha Fazla Yükle
+      </button>
+    </div>
+  </section>
+
+  <!-- ── SATICILAR ── -->
+  <section aria-labelledby="sellers-heading">
+    <div class="flex items-center justify-between mb-4">
+      <h2 id="sellers-heading" class="text-xl font-black text-gray-900">Öne Çıkan Satıcılar</h2>
+    </div>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+      <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex items-center gap-3 hover:shadow-md transition-shadow cursor-pointer">
+        <div class="w-12 h-12 rounded-xl bg-blue-500 flex items-center justify-center text-white font-black text-lg flex-shrink-0">T</div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1"><p class="font-bold text-sm text-gray-900 truncate">TechStore</p><svg width="14" height="14" fill="#2563eb" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <p class="text-xs text-gray-500">⭐ 4.9 · 1.243 ürün</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex items-center gap-3 hover:shadow-md transition-shadow cursor-pointer">
+        <div class="w-12 h-12 rounded-xl bg-rose-500 flex items-center justify-center text-white font-black text-lg flex-shrink-0">F</div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1"><p class="font-bold text-sm text-gray-900 truncate">FashionHub</p><svg width="14" height="14" fill="#2563eb" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <p class="text-xs text-gray-500">⭐ 4.8 · 876 ürün</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex items-center gap-3 hover:shadow-md transition-shadow cursor-pointer">
+        <div class="w-12 h-12 rounded-xl bg-amber-500 flex items-center justify-center text-white font-black text-lg flex-shrink-0">H</div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1"><p class="font-bold text-sm text-gray-900 truncate">HomeBot</p><svg width="14" height="14" fill="#2563eb" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <p class="text-xs text-gray-500">⭐ 4.7 · 432 ürün</p>
+        </div>
+      </div>
+      <div class="bg-white rounded-xl p-4 border border-gray-100 shadow-sm flex items-center gap-3 hover:shadow-md transition-shadow cursor-pointer">
+        <div class="w-12 h-12 rounded-xl bg-green-600 flex items-center justify-center text-white font-black text-lg flex-shrink-0">S</div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1"><p class="font-bold text-sm text-gray-900 truncate">SportZone</p><svg width="14" height="14" fill="#2563eb" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+          <p class="text-xs text-gray-500">⭐ 4.9 · 654 ürün</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Pi ÖDEME BANNER ── -->
+  <section>
+    <div class="rounded-2xl overflow-hidden bg-gradient-to-r from-[#1e3a8a] to-[#1e40af] p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="text-white text-center sm:text-left">
+        <div class="flex items-center justify-center sm:justify-start gap-2 mb-2">
+          <span class="text-3xl">π</span>
+          <span class="text-2xl font-black">Pi ile Öde</span>
+        </div>
+        <p class="text-blue-200 text-sm max-w-md">Pi Network ile güvenli, hızlı ve komisyonsuz ödeme yapın. Blockchain teknolojisiyle korunan her işlem.</p>
+        <div class="flex flex-wrap justify-center sm:justify-start gap-3 mt-4">
+          <span class="bg-white/15 text-white text-xs px-3 py-1.5 rounded-full font-medium">✅ Doğrulanmış Satıcılar</span>
+          <span class="bg-white/15 text-white text-xs px-3 py-1.5 rounded-full font-medium">🔐 Blockchain Güvencesi</span>
+          <span class="bg-white/15 text-white text-xs px-3 py-1.5 rounded-full font-medium">⚡ Anında Onay</span>
+        </div>
+      </div>
+      <a href="/giris" class="pi-btn text-white font-black px-8 py-4 rounded-2xl text-base flex-shrink-0 shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
+        <span class="text-xl">π</span>
+        Hemen Başla
+      </a>
+    </div>
+  </section>
+
+  <!-- ── İSTATİSTİKLER ── -->
+  <section class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <div class="bg-white rounded-xl p-5 text-center border border-gray-100 shadow-sm">
+      <div class="text-3xl font-black text-[#1e3a8a]">150K+</div>
+      <div class="text-sm text-gray-500 mt-1">Aktif Kullanıcı</div>
+    </div>
+    <div class="bg-white rounded-xl p-5 text-center border border-gray-100 shadow-sm">
+      <div class="text-3xl font-black text-[#1e3a8a]">50K+</div>
+      <div class="text-sm text-gray-500 mt-1">Ürün Çeşidi</div>
+    </div>
+    <div class="bg-white rounded-xl p-5 text-center border border-gray-100 shadow-sm">
+      <div class="text-3xl font-black text-[#1e3a8a]">8.5K+</div>
+      <div class="text-sm text-gray-500 mt-1">Doğrulanmış Satıcı</div>
+    </div>
+    <div class="bg-white rounded-xl p-5 text-center border border-gray-100 shadow-sm">
+      <div class="text-3xl font-black text-[#1e3a8a]">150+</div>
+      <div class="text-sm text-gray-500 mt-1">Ülkeye Teslimat</div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="bg-[#111827] text-gray-400 mt-12 pt-10 pb-24 md:pb-10">
+  <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-4 gap-8 mb-10">
+    <div class="col-span-2 sm:col-span-1">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-9 h-9 rounded-xl bg-[#1e3a8a] flex items-center justify-center">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
+        <span class="text-white font-black text-lg">Ucuzcubakkal</span>
+      </div>
+      <p class="text-sm text-gray-500 leading-relaxed">Pi Network topluluğu için özel tasarlanmış global e-ticaret platformu.</p>
+    </div>
+    <div>
+      <h4 class="text-white font-bold text-sm mb-3">Keşfet</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-white transition-colors">Kategoriler</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">Flaş İndirimler</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">Yeni Ürünler</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">Öne Çıkan Satıcılar</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-white font-bold text-sm mb-3">Hesabım</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="/giris" class="hover:text-white transition-colors">Giriş Yap</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">Siparişlerim</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">Favorilerim</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">Satıcı Ol</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 class="text-white font-bold text-sm mb-3">Yardım</h4>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-white transition-colors">Sık Sorulan Sorular</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">Kargo Takibi</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">İade & Değişim</a></li>
+        <li><a href="#" class="hover:text-white transition-colors">İletişim</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto px-4 border-t border-gray-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm">
+    <p>© 2025 Ucuzcubakkal. Tüm hakları saklıdır.</p>
+    <p class="flex items-center gap-1.5">Pi Network ile güvenli ödeme <span class="text-lg font-bold text-amber-400">π</span></p>
+  </div>
+</footer>
+
+<!-- ═══════════════════ MOBİL ALT NAVİGASYON ═══════════════════ -->
+<nav class="bottom-nav md:hidden" aria-label="Alt navigasyon">
+  <div class="flex items-center justify-around py-2 px-2">
+    <a href="/" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl bg-blue-50 text-[#1e3a8a]">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span class="text-[10px] font-bold">Ana Sayfa</span>
+    </a>
+    <button onclick="showSearchModal()" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-gray-500">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <span class="text-[10px] font-medium">Ara</span>
+    </button>
+    <button onclick="toggleCart()" class="relative flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-gray-500">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span id="cartBadgeMobile" class="cart-badge hidden">0</span>
+      <span class="text-[10px] font-medium">Sepet</span>
+    </button>
+    <button class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-gray-500">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      <span class="text-[10px] font-medium">Favori</span>
+    </button>
+    <a href="/giris" class="flex flex-col items-center gap-0.5 px-3 py-1 rounded-xl text-gray-500">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span class="text-[10px] font-medium">Hesabım</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ═══════════════════ SEPET PANELİ ═══════════════════ -->
+<div id="cartOverlay" class="fixed inset-0 bg-black/50 z-50 hidden" onclick="toggleCart()"></div>
+<div id="cartPanel" class="fixed top-0 right-0 h-full w-80 max-w-full bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+  <div class="flex items-center justify-between p-4 border-b">
+    <h3 class="font-bold text-gray-900">Sepetim</h3>
+    <button onclick="toggleCart()" class="p-2 rounded-lg hover:bg-gray-100">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="cartItems" class="flex-1 overflow-y-auto p-4">
+    <div id="cartEmpty" class="flex flex-col items-center justify-center h-full text-center py-12">
+      <div class="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center mb-4">
+        <svg width="32" height="32" fill="none" stroke="#9ca3af" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </div>
+      <p class="font-semibold text-gray-600">Sepetiniz boş</p>
+      <p class="text-sm text-gray-400 mt-1">Ürün eklemek için alışverişe başlayın</p>
+    </div>
+    <div id="cartList" class="space-y-3 hidden"></div>
+  </div>
+  <div id="cartFooter" class="p-4 border-t hidden">
+    <div class="flex justify-between items-center mb-3">
+      <span class="font-semibold text-gray-700">Toplam:</span>
+      <span id="cartTotal" class="font-black text-xl text-[#1e3a8a]">0 π</span>
+    </div>
+    <button class="w-full pi-btn text-white font-bold py-3 rounded-xl text-base flex items-center justify-center gap-2">
+      <span class="text-lg">π</span> Pi ile Öde
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════ JAVASCRIPT ═══════════════════ -->
+<script>
+/* ─── VERİ ─── */
+const PRODUCTS = [
+  { id:"1",  name:"iPhone 15 Pro Max Kılıf",   seller:"CasePro",       price:45,  origPrice:45,  discount:0,  rating:4.9, reviews:5621, img:"https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&q=80", badge:"yeni",       cat:"elektronik", freeShip:true  },
+  { id:"2",  name:"Kadın Yazlık Elbise",        seller:"FashionHub",    price:89,  origPrice:120, discount:26, rating:4.7, reviews:3287, img:"https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&q=80", badge:"indirim",    cat:"giyim",      freeShip:true  },
+  { id:"3",  name:"Yoga Matı Kaymaz",           seller:"YogaWorld",     price:55,  origPrice:75,  discount:27, rating:4.8, reviews:2109, img:"https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=400&q=80", badge:"indirim",    cat:"spor",       freeShip:false },
+  { id:"4",  name:"Kahve Makinesi Otomatik",    seller:"KahveDünyası",  price:420, origPrice:599, discount:30, rating:4.9, reviews:8743, img:"https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&q=80", badge:"cok-satan",  cat:"ev-yasam",   freeShip:true  },
+  { id:"5",  name:"Erkek Deri Mont",            seller:"LeatherCo",     price:350, origPrice:499, discount:30, rating:4.6, reviews:1432, img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80", badge:"indirim",    cat:"giyim",      freeShip:true  },
+  { id:"6",  name:"Oyuncu Kulaklığı RGB",       seller:"GamerZone",     price:199, origPrice:299, discount:33, rating:4.8, reviews:2876, img:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80", badge:"cok-satan",  cat:"elektronik", freeShip:false },
+  { id:"7",  name:"Çocuk Puzzle 500 Parça",     seller:"KidsToys",      price:35,  origPrice:55,  discount:36, rating:4.9, reviews:4521, img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80", badge:"yeni",       cat:"bebek",      freeShip:true  },
+  { id:"8",  name:"Güneş Gözlüğü UV400",        seller:"OpticPlus",     price:75,  origPrice:120, discount:38, rating:4.7, reviews:1876, img:"https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&q=80", badge:"indirim",    cat:"giyim",      freeShip:false },
+  { id:"9",  name:"El Yapımı Seramik Kupa",     seller:"SeramikAtölye", price:25,  origPrice:35,  discount:29, rating:4.9, reviews:812,  img:"https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=400&q=80", badge:"yeni",       cat:"el-sanatlari",freeShip:true  },
+  { id:"10", name:"Organik Zeytinyağı Sabunu",  seller:"DoğalSabun",    price:12,  origPrice:18,  discount:33, rating:4.8, reviews:1540, img:"https://images.unsplash.com/photo-1601924638867-3a6de6b7a500?w=400&q=80", badge:"cok-satan",  cat:"organik",    freeShip:true  },
+  { id:"11", name:"El Dokuma Kilim 80x150",     seller:"HalıDükkânı",   price:280, origPrice:380, discount:26, rating:4.7, reviews:320,  img:"https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&q=80", badge:"indirim",    cat:"el-sanatlari",freeShip:false },
+  { id:"12", name:"Bakır Telkari Küpe",         seller:"TelkariUsta",   price:45,  origPrice:65,  discount:31, rating:4.9, reviews:670,  img:"https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&q=80", badge:"yeni",       cat:"mucevher",   freeShip:true  },
+  { id:"f1", name:"Wireless Kulaklık Pro",      seller:"TechStore",     price:89,  origPrice:189, discount:53, rating:4.7, reviews:2341, img:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80", badge:"flash",      cat:"elektronik", freeShip:true  },
+  { id:"f2", name:"Spor Koşu Ayakkabısı",       seller:"SportZone",     price:125, origPrice:249, discount:50, rating:4.8, reviews:1876, img:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80", badge:"flash",      cat:"spor",       freeShip:true  },
+  { id:"f3", name:"Erkek Slim Fit Takım",       seller:"ModaHouse",     price:210, origPrice:399, discount:47, rating:4.6, reviews:943,  img:"https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&q=80", badge:"flash",      cat:"giyim",      freeShip:false },
+  { id:"f4", name:"Akıllı Saat Fitness",        seller:"SmartGear",     price:175, origPrice:320, discount:45, rating:4.9, reviews:3102, img:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&q=80", badge:"flash",      cat:"elektronik", freeShip:true  },
+  { id:"f5", name:"Deri Çanta Kadın",           seller:"LeatherCo",     price:149, origPrice:280, discount:47, rating:4.8, reviews:1254, img:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80", badge:"flash",      cat:"giyim",      freeShip:true  },
+  { id:"f6", name:"Robot Süpürge",              seller:"HomeBot",        price:299, origPrice:599, discount:50, rating:4.7, reviews:4210, img:"https://images.unsplash.com/photo-1558317374-067fb5f30001?w=400&q=80", badge:"flash",      cat:"ev-yasam",   freeShip:true  },
+];
+
+/* ─── STATE ─── */
+let cart = [];
+let cartOpen = false;
+let currentPage = 1;
+let pageSize = 8;
+let activeCat = 'tumu';
+let activeSort = 'default';
+let searchQuery = '';
+
+/* ─── HERO CAROUSEL ─── */
+let heroIdx = 0;
+const heroSlides = document.querySelectorAll('.hero-slide');
+const heroDotBtns = document.querySelectorAll('.hero-dot');
+
+function heroGoTo(n) {
+  heroSlides[heroIdx].classList.replace('active','inactive');
+  heroDotBtns[heroIdx].classList.remove('w-6','bg-white');
+  heroDotBtns[heroIdx].classList.add('w-1.5','bg-white/40');
+  heroIdx = ((n % heroSlides.length) + heroSlides.length) % heroSlides.length;
+  heroSlides[heroIdx].classList.replace('inactive','active');
+  heroDotBtns[heroIdx].classList.remove('w-1.5','bg-white/40');
+  heroDotBtns[heroIdx].classList.add('w-6','bg-white');
+}
+function heroNav(dir) { heroGoTo(heroIdx + dir); }
+setInterval(() => heroNav(1), 5000);
+
+/* Touch swipe for hero */
+let heroTouchX = 0;
+document.getElementById('heroCarousel').addEventListener('touchstart', e => { heroTouchX = e.touches[0].clientX; }, {passive:true});
+document.getElementById('heroCarousel').addEventListener('touchend', e => {
+  const diff = heroTouchX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 40) heroNav(diff > 0 ? 1 : -1);
+}, {passive:true});
+
+/* ─── STARS ─── */
+function stars(rating) {
+  let s = '';
+  for (let i = 1; i <= 5; i++) {
+    s += `<svg width="12" height="12" viewBox="0 0 24 24" fill="${i <= Math.round(rating) ? '#f59e0b' : '#e5e7eb'}" style="display:inline;vertical-align:middle"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+  }
+  return s;
+}
+
+/* ─── BADGE ─── */
+function badgeLabel(b) {
+  const map = { flash:'⚡ Flash', yeni:'Yeni', indirim:'İndirim', 'cok-satan':'Çok Satan' };
+  return map[b] || '';
+}
+
+/* ─── ÜRÜN KARTI ─── */
+function productCard(p, small = false) {
+  const disc = p.discount > 0 ? `<span class="badge-${p.badge} text-[10px] font-black px-1.5 py-0.5 rounded-md absolute top-2 left-2">-%${p.discount}</span>` : '';
+  const badgeLbl = badgeLabel(p.badge);
+  const ship = p.freeShip ? `<span class="text-green-600 text-[10px] font-semibold flex items-center gap-0.5">🚚 Ücretsiz kargo</span>` : '';
+  const orig = p.origPrice > p.price ? `<span class="text-gray-400 line-through text-xs ml-1">${p.origPrice}π</span>` : '';
+  return `
+    <div class="product-card bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm cursor-pointer" onclick="addToCart('${p.id}')">
+      <div class="relative ${small ? 'aspect-square' : 'aspect-[4/3]'} bg-gray-100 overflow-hidden">
+        <img src="${p.img}" alt="${p.name}" loading="lazy" class="w-full h-full object-cover" onerror="this.src='https://via.placeholder.com/400x300?text=Ürün'"/>
+        ${disc}
+        ${badgeLbl ? `<span class="badge-${p.badge} text-[10px] font-black px-1.5 py-0.5 rounded-md absolute top-2 ${p.discount>0?'left-16':'left-2'}">${badgeLbl}</span>` : ''}
+        <button onclick="event.stopPropagation(); toggleFav('${p.id}', this)" class="absolute top-2 right-2 w-7 h-7 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center hover:scale-110 transition-transform">
+          <svg width="14" height="14" fill="none" stroke="#ef4444" stroke-width="2" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        </button>
+      </div>
+      <div class="p-3">
+        <p class="text-[11px] text-gray-500 mb-0.5 truncate">${p.seller}</p>
+        <p class="text-sm font-semibold text-gray-900 leading-snug mb-1 line-clamp-2">${p.name}</p>
+        <div class="flex items-center gap-1 mb-1">
+          ${stars(p.rating)}
+          <span class="text-[11px] text-gray-500">(${p.reviews.toLocaleString('tr-TR')})</span>
+        </div>
+        ${ship}
+        <div class="flex items-center justify-between mt-2">
+          <div>
+            <span class="font-black text-base text-[#1e3a8a]">${p.price}π</span>${orig}
+          </div>
+          <button onclick="event.stopPropagation(); addToCart('${p.id}')" class="bg-[#1e3a8a] text-white text-[11px] font-bold px-2.5 py-1.5 rounded-lg hover:bg-blue-800 transition-colors flex items-center gap-1">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            Ekle
+          </button>
+        </div>
+      </div>
+    </div>`;
+}
+
+/* ─── FLASH GRİD ─── */
+function renderFlash() {
+  const flash = PRODUCTS.filter(p => p.badge === 'flash');
+  document.getElementById('flashGrid').innerHTML = flash.map(p => productCard(p, true)).join('');
+}
+
+/* ─── FİLTRELE & SIRALAMA ─── */
+function getFiltered() {
+  let list = activeCat === 'tumu' ? [...PRODUCTS] : PRODUCTS.filter(p => p.cat === activeCat);
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    list = list.filter(p => p.name.toLowerCase().includes(q) || p.seller.toLowerCase().includes(q));
+  }
+  if (activeSort === 'price-asc')  list.sort((a,b) => a.price - b.price);
+  if (activeSort === 'price-desc') list.sort((a,b) => b.price - a.price);
+  if (activeSort === 'rating')     list.sort((a,b) => b.rating - a.rating);
+  if (activeSort === 'reviews')    list.sort((a,b) => b.reviews - a.reviews);
+  return list;
+}
+
+function renderProducts() {
+  const list = getFiltered();
+  const visible = list.slice(0, currentPage * pageSize);
+  document.getElementById('productsGrid').innerHTML = visible.map(p => productCard(p)).join('');
+  document.getElementById('loadMoreBtn').style.display = visible.length >= list.length ? 'none' : 'inline-flex';
+}
+
+function loadMore() { currentPage++; renderProducts(); }
+
+function filterCategory(cat) {
+  activeCat = cat;
+  currentPage = 1;
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    const isActive = b.dataset.cat === cat;
+    b.className = `cat-btn flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-${isActive?'semibold':'medium'} whitespace-nowrap transition-colors ${isActive ? 'text-white bg-[#1e3a8a]' : 'text-gray-600 hover:bg-gray-100'}`;
+  });
+  const titles = { tumu:'Tüm Ürünler', 'el-sanatlari':'El Sanatları', giyim:'Giyim', elektronik:'Elektronik', 'ev-yasam':'Ev & Yaşam', organik:'Organik', mucevher:'Mücevher', spor:'Spor', kitap:'Kitap', ozel:'Özel Tasarım', bebek:'Anne & Bebek', market:'Süpermarket' };
+  document.getElementById('sectionTitle').textContent = titles[cat] || 'Ürünler';
+  renderProducts();
+  document.getElementById('urunler').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function applySort() { activeSort = document.getElementById('sortSelect').value; currentPage = 1; renderProducts(); }
+
+function doSearch() {
+  searchQuery = document.getElementById('searchInput').value.trim();
+  activeCat = 'tumu'; currentPage = 1;
+  document.getElementById('sectionTitle').textContent = searchQuery ? `"${searchQuery}" için sonuçlar` : 'Tüm Ürünler';
+  renderProducts();
+  document.getElementById('urunler').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
+
+/* ─── SEPET ─── */
+function addToCart(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+  const existing = cart.find(x => x.id === id);
+  if (existing) existing.qty++;
+  else cart.push({ ...p, qty: 1 });
+  updateCartUI();
+  showToast(`"${p.name}" sepete eklendi!`);
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(x => x.id !== id);
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const count = cart.reduce((s, x) => s + x.qty, 0);
+  const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+  [document.getElementById('cartBadge'), document.getElementById('cartBadgeMobile')].forEach(el => {
+    if (!el) return;
+    el.textContent = count;
+    el.classList.toggle('hidden', count === 0);
+  });
+  document.getElementById('cartTotal').textContent = total + ' π';
+  const cartList = document.getElementById('cartList');
+  const cartEmpty = document.getElementById('cartEmpty');
+  const cartFooter = document.getElementById('cartFooter');
+  if (cart.length === 0) {
+    cartList.classList.add('hidden'); cartEmpty.classList.remove('hidden'); cartFooter.classList.add('hidden');
+  } else {
+    cartEmpty.classList.add('hidden'); cartList.classList.remove('hidden'); cartFooter.classList.remove('hidden');
+    cartList.innerHTML = cart.map(item => `
+      <div class="flex gap-3 bg-gray-50 rounded-xl p-3">
+        <img src="${item.img}" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover flex-shrink-0" />
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-gray-800 line-clamp-2 leading-snug">${item.name}</p>
+          <p class="text-xs text-gray-500 mt-0.5">${item.seller}</p>
+          <div class="flex items-center justify-between mt-2">
+            <span class="font-black text-[#1e3a8a]">${item.price * item.qty}π</span>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-500">x${item.qty}</span>
+              <button onclick="removeFromCart('${item.id}')" class="text-red-500 hover:text-red-700 p-1">
+                <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+}
+
+function toggleCart() {
+  cartOpen = !cartOpen;
+  const panel = document.getElementById('cartPanel');
+  const overlay = document.getElementById('cartOverlay');
+  panel.style.transform = cartOpen ? 'translateX(0)' : 'translateX(100%)';
+  overlay.classList.toggle('hidden', !cartOpen);
+}
+
+/* ─── FAVORİ ─── */
+const favs = new Set();
+function toggleFav(id, btn) {
+  if (favs.has(id)) { favs.delete(id); btn.querySelector('svg').setAttribute('fill','none'); }
+  else { favs.add(id); btn.querySelector('svg').setAttribute('fill','#ef4444'); showToast('Favorilere eklendi!'); }
+}
+
+/* ─── TOAST ─── */
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 20px;border-radius:12px;font-size:13px;font-weight:600;z-index:9999;white-space:nowrap;box-shadow:0 4px 16px rgba(0,0,0,.3);animation:fadeIn .3s ease';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2500);
+}
+
+/* ─── SEARCH MODAL (mobil) ─── */
+function showSearchModal() {
+  document.getElementById('searchInput').focus();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ─── İLK RENDER ─── */
+renderFlash();
+renderProducts();
+</script>
+
+</body>
+</html>
