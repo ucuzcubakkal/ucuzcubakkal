@@ -8,6 +8,30 @@ import { AdminBroadcast } from "@/components/admin-broadcast";
 import { AdminAIAssistant } from "@/components/admin-ai-assistant";
 import { AdminCampaign } from "@/components/admin-campaign";
 import { AdminPerformance } from "@/components/admin-performance";
+import { AdminCommandPalette } from "@/components/admin-command-palette";
+import { AdminUserDetail } from "@/components/admin-user-detail";
+import { AdminFinanceAdvanced } from "@/components/admin-finance-advanced";
+import { AdminContentManager } from "@/components/admin-content-manager";
+import { AdminSecurityPanel } from "@/components/admin-security-panel";
+import { AdminServiceHealth } from "@/components/admin-service-health";
+import { AdminLiveStats } from "@/components/admin-live-stats";
+import { AdminProductModeration } from "@/components/admin-product-moderation";
+import { AdminEmailTemplates } from "@/components/admin-email-templates";
+import { AdminSellerComparison } from "@/components/admin-seller-comparison";
+import { AdminPricingRules } from "@/components/admin-pricing-rules";
+import { AdminSentimentAnalysis } from "@/components/admin-sentiment";
+import { AdminTaskManager } from "@/components/admin-task-manager";
+import { AdminABTest } from "@/components/admin-ab-test";
+import { AdminReportExport } from "@/components/admin-report-export";
+import { AdminCustomerLifecycle } from "@/components/admin-customer-lifecycle";
+import { AdminPredictiveSales } from "@/components/admin-predictive-sales";
+import { AdminPaymentCalendar } from "@/components/admin-payment-calendar";
+import { AdminCommissionSim } from "@/components/admin-commission-sim";
+import { AdminHelpdesk } from "@/components/admin-helpdesk";
+import { AdminWaitlist } from "@/components/admin-waitlist";
+import { AdminRoleManagement } from "@/components/admin-role-management";
+import { AdminBulkArchive } from "@/components/admin-bulk-archive";
+import { AdminWeeklyEmail } from "@/components/admin-weekly-email";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -43,7 +67,7 @@ import {
   Phone, ChevronDown, ChevronUp, MoreVertical, PieChart as PieIcon,
   Image as ImageIcon,
   Lock, Hash, MessageSquare, DollarSign, UserPlus, Info, Sliders,
-  Sparkles,
+  Sparkles, Moon, Sun, SlidersHorizontal, GripVertical, EyeOff,
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -282,8 +306,8 @@ function KpiCard({ title, value, sub, icon, trend, trendUp, onClick }: { title:s
 }
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
-function DashboardSection({ orders, products, sellers, members, onNav }: {
-  orders:Order[]; products:Product[]; sellers:Seller[]; members:Member[]; onNav:(s:Section)=>void;
+function DashboardSection({ orders, products, sellers, members, onNav, hiddenWidgets = [] }: {
+  orders:Order[]; products:Product[]; sellers:Seller[]; members:Member[]; onNav:(s:Section)=>void; hiddenWidgets?: string[];
 }) {
   const [clock, setClock] = useState(new Date());
   useEffect(() => { const t = setInterval(() => setClock(new Date()), 1000); return () => clearInterval(t); }, []);
@@ -330,7 +354,7 @@ function DashboardSection({ orders, products, sellers, members, onNav }: {
       )}
 
       {/* Mini metrics strip */}
-      <div className="grid grid-cols-3 lg:grid-cols-6 gap-2">
+      {!hiddenWidgets.includes("stats") && <div className="grid grid-cols-3 lg:grid-cols-6 gap-2">
         {miniMetrics.map(m=>(
           <Card key={m.label} className="border border-border shadow-none">
             <CardContent className="p-3">
@@ -340,18 +364,18 @@ function DashboardSection({ orders, products, sellers, members, onNav }: {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </div>}
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      {!hiddenWidgets.includes("stats") && <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         <KpiCard title="Toplam Ciro" value={`${(totalRevenue/1000).toFixed(1)}k π`} sub="Son 6 ay" icon={<TrendingUp className="h-5 w-5 text-primary"/>} trend="+21%" trendUp onClick={()=>onNav("reports")}/>
         <KpiCard title="Toplam Sipariş" value={MONTHLY.reduce((s,m)=>s+m.siparis,0).toString()} sub="Son 6 ay" icon={<ShoppingBag className="h-5 w-5 text-blue-600"/>} trend="+18%" trendUp onClick={()=>onNav("orders")}/>
         <KpiCard title="Aktif Üye" value={members.filter(m=>m.status==="aktif").length.toString()} sub={`${members.filter(m=>m.segment==="VIP").length} VIP üye`} icon={<Users className="h-5 w-5 text-purple-600"/>} trend="+14%" trendUp onClick={()=>onNav("members")}/>
         <KpiCard title="Aktif Satıcı" value={sellers.filter(s=>s.status==="aktif").length.toString()} sub={`${sellers.filter(s=>s.verified).length} doğrulanmış`} icon={<Store className="h-5 w-5 text-green-600"/>} trend="+8%" trendUp onClick={()=>onNav("sellers")}/>
-      </div>
+      </div>}
 
       {/* Charts row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      {!hiddenWidgets.includes("chart") && <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Card className="border border-border shadow-none lg:col-span-2">
           <CardHeader className="px-5 pt-5 pb-2 flex-row items-center justify-between">
             <div><CardTitle className="text-sm font-semibold">Gelir & Sipariş Trendi</CardTitle><CardDescription className="text-xs">Son 6 aylık performans</CardDescription></div>
@@ -434,10 +458,10 @@ function DashboardSection({ orders, products, sellers, members, onNav }: {
             </ResponsiveContainer>
           </CardContent>
         </Card>
-      </div>
+      </div>}
 
       {/* Top products + Top sellers */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {!hiddenWidgets.includes("products") && !hiddenWidgets.includes("sellers") && <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Card className="border border-border shadow-none">
           <CardHeader className="px-5 pt-5 pb-3 flex-row items-center justify-between">
             <CardTitle className="text-sm font-semibold">En Çok Satan Ürünler</CardTitle>
@@ -483,10 +507,10 @@ function DashboardSection({ orders, products, sellers, members, onNav }: {
             ))}
           </CardContent>
         </Card>
-      </div>
+      </div>}
 
       {/* Recent orders */}
-      <Card className="border border-border shadow-none">
+      {!hiddenWidgets.includes("orders") && <Card className="border border-border shadow-none">
         <CardHeader className="px-5 pt-5 pb-3 flex-row items-center justify-between">
           <CardTitle className="text-sm font-semibold">Son Siparişler</CardTitle>
           <button onClick={()=>onNav("orders")} className="text-xs text-primary hover:underline flex items-center gap-0.5">Tümü<ChevronRight className="h-3 w-3"/></button>
@@ -510,7 +534,7 @@ function DashboardSection({ orders, products, sellers, members, onNav }: {
             </tbody>
           </table>
         </div>
-      </Card>
+      </Card>}
     </div>
   );
 }
@@ -898,7 +922,7 @@ function SellersSection({ sellers, setSellers }: { sellers:Seller[]; setSellers:
 }
 
 // ─── Members ──────────────────────────────────────────────────────────────────
-function MembersSection({ members, setMembers }: { members:Member[]; setMembers:React.Dispatch<React.SetStateAction<Member[]>> }) {
+function MembersSection({ members, setMembers, onOpenDetail }: { members:Member[]; setMembers:React.Dispatch<React.SetStateAction<Member[]>>; onOpenDetail?: (m:Member) => void }) {
   const [search, setSearch]     = useState("");
   const [segF,   setSegF]       = useState("all");
   const [roleF,  setRoleF]      = useState("all");
@@ -950,9 +974,14 @@ function MembersSection({ members, setMembers }: { members:Member[]; setMembers:
                   <td className="p-3 text-xs text-muted-foreground whitespace-nowrap">{m.joinDate}</td>
                   <td className="p-3"><span className={`px-2 py-0.5 rounded-full text-xs font-medium ${userStatusColor[m.status]}`}>{m.status.charAt(0).toUpperCase()+m.status.slice(1)}</span></td>
                   <td className="p-3" onClick={e=>e.stopPropagation()}>
-                    <Button size="icon" variant="ghost" className="h-7 w-7" onClick={()=>{setMembers(prev=>prev.map(x=>x.id===m.id?{...x,status:x.status==="aktif"?"askida":"aktif"}:x));toast({title:"Üye güncellendi"});}}>
-                      {m.status==="aktif"?<Ban className="h-3.5 w-3.5 text-amber-500"/>:<Check className="h-3.5 w-3.5 text-green-500"/>}
-                    </Button>
+                    <div className="flex items-center gap-1">
+                      <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-500 hover:bg-blue-50" onClick={()=>onOpenDetail?.(m)}>
+                        <Eye className="h-3.5 w-3.5"/>
+                      </Button>
+                      <Button size="icon" variant="ghost" className="h-7 w-7" onClick={()=>{setMembers(prev=>prev.map(x=>x.id===m.id?{...x,status:x.status==="aktif"?"askida":"aktif"}:x));toast({title:"Üye güncellendi"});}}>
+                        {m.status==="aktif"?<Ban className="h-3.5 w-3.5 text-amber-500"/>:<Check className="h-3.5 w-3.5 text-green-500"/>}
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -1923,8 +1952,31 @@ export default function AdminPage() {
   const [pass,    setPass]    = useState("");
   const [showPw,  setShowPw]  = useState(false);
   const [section, setSection] = useState<Section>("dashboard");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [notifOpen,   setNotifOpen]   = useState(false);
+  const [sidebarOpen,     setSidebarOpen]     = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [darkMode,         setDarkMode]         = useState(false);
+  const [notifOpen,        setNotifOpen]        = useState(false);
+  const [cmdOpen,          setCmdOpen]          = useState(false);
+  const [selectedMember,   setSelectedMember]   = useState<Member | null>(null);
+  const [memberDetailOpen, setMemberDetailOpen] = useState(false);
+  const [hiddenWidgets,    setHiddenWidgets]    = useState<string[]>([]);
+  const [widgetPanelOpen,  setWidgetPanelOpen]  = useState(false);
+
+  // Koyu tema uygula
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "k") {
+        e.preventDefault();
+        setCmdOpen(prev => !prev);
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   const [orders,       setOrders]       = useState<Order[]>(INIT_ORDERS);
   const [products,     setProducts]     = useState<Product[]>(INIT_PRODUCTS);
@@ -1989,34 +2041,46 @@ export default function AdminPage() {
 
   const navigate = (s:Section) => { setSection(s); setSidebarOpen(false); };
 
-  const SidebarContent = () => (
+  const SidebarContent = ({ collapsed = false }: { collapsed?: boolean }) => (
     <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-border">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center flex-shrink-0"><span className="text-white font-bold text-sm">U</span></div>
-          <div><p className="font-bold text-sm leading-tight">Ucuzcubakkal</p><p className="text-xs text-muted-foreground">Admin Paneli</p></div>
+      <div className={`border-b border-border flex items-center ${collapsed ? "p-3 justify-center" : "p-4 gap-3"}`}>
+        <div className="w-8 h-8 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+          <span className="text-white font-bold text-sm">U</span>
         </div>
+        {!collapsed && <div><p className="font-bold text-sm leading-tight">Ucuzcubakkal</p><p className="text-xs text-muted-foreground">Admin Paneli</p></div>}
       </div>
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-4">
         {navGroups.map(group=>(
           <div key={group.label}>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-1">{group.label}</p>
+            {!collapsed && <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 mb-1">{group.label}</p>}
             {group.items.map(item=>(
               <button key={item.id} onClick={()=>navigate(item.id as Section)}
-                className={`w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${section===item.id?"bg-primary text-primary-foreground shadow-sm":"hover:bg-muted text-muted-foreground hover:text-foreground"}`}>
-                <div className="flex items-center gap-3">{item.icon}<span>{item.label}</span></div>
-                {(item.badge||0)>0 && <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${section===item.id?"bg-white/20 text-white":"bg-red-100 text-red-600"}`}>{item.badge}</span>}
+                title={collapsed ? item.label : undefined}
+                className={`w-full flex items-center ${collapsed ? "justify-center px-2" : "justify-between gap-3 px-3"} py-2.5 rounded-xl text-sm font-medium transition-all ${section===item.id?"bg-primary text-primary-foreground shadow-sm":"hover:bg-muted text-muted-foreground hover:text-foreground"}`}>
+                <div className={`flex items-center ${collapsed ? "" : "gap-3"}`}>
+                  {item.icon}
+                  {!collapsed && <span>{item.label}</span>}
+                </div>
+                {!collapsed && (item.badge||0)>0 && <span className={`px-1.5 py-0.5 rounded-full text-xs font-bold ${section===item.id?"bg-white/20 text-white":"bg-red-100 text-red-600"}`}>{item.badge}</span>}
+                {collapsed && (item.badge||0)>0 && <span className="absolute top-1 right-1 w-3 h-3 bg-red-500 rounded-full text-white text-[8px] flex items-center justify-center">{item.badge}</span>}
               </button>
             ))}
           </div>
         ))}
       </nav>
       <div className="p-3 border-t border-border">
-        <div className="flex items-center gap-2 p-2 rounded-xl bg-muted mb-2">
-          <Avatar className="w-8 h-8"><AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">HA</AvatarFallback></Avatar>
-          <div className="flex-1 min-w-0"><p className="text-xs font-semibold truncate">hanedan</p><p className="text-xs text-muted-foreground">Süper Admin</p></div>
-        </div>
-        <button onClick={()=>{setAuthed(false);setUser("");setPass("");}} className="w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium text-red-600 hover:bg-red-50 transition-colors"><LogOut className="h-4 w-4"/>Çıkış Yap</button>
+        {!collapsed && (
+          <div className="flex items-center gap-2 p-2 rounded-xl bg-muted mb-2">
+            <Avatar className="w-8 h-8"><AvatarFallback className="bg-primary text-primary-foreground text-xs font-bold">HA</AvatarFallback></Avatar>
+            <div className="flex-1 min-w-0"><p className="text-xs font-semibold truncate">hanedan</p><p className="text-xs text-muted-foreground">Süper Admin</p></div>
+          </div>
+        )}
+        <button onClick={()=>{setAuthed(false);setUser("");setPass("");}}
+          title={collapsed ? "Cikis Yap" : undefined}
+          className={`w-full flex items-center ${collapsed ? "justify-center px-2" : "gap-2 px-3"} py-2 rounded-xl text-xs font-medium text-red-600 hover:bg-red-50 transition-colors`}>
+          <LogOut className="h-4 w-4"/>
+          {!collapsed && "Çıkış Yap"}
+        </button>
       </div>
     </div>
   );
@@ -2053,9 +2117,36 @@ export default function AdminPage() {
   return (
     <div className="flex h-screen bg-[#F7F7F7] overflow-hidden">
       <Toaster/>
+
+      {/* Komut Paleti */}
+      <AdminCommandPalette
+        open={cmdOpen}
+        onClose={() => setCmdOpen(false)}
+        onNavigate={(s) => { navigate(s); setCmdOpen(false); }}
+      />
+
+      {/* Kullanici Detay Sheet */}
+      <AdminUserDetail
+        member={selectedMember}
+        open={memberDetailOpen}
+        onClose={() => setMemberDetailOpen(false)}
+        onStatusChange={(id, status) => {
+          setMembers(prev => prev.map(m => m.id === id ? { ...m, status: status as any } : m));
+          setMemberDetailOpen(false);
+          toast({ title: "Kullanici durumu guncellendi", duration: 2000 });
+        }}
+      />
+
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex w-60 flex-col flex-shrink-0 bg-card border-r border-border h-screen overflow-hidden">
-        <SidebarContent/>
+      <aside className={`hidden md:flex flex-col flex-shrink-0 bg-card border-r border-border h-screen overflow-hidden transition-all duration-300 relative ${sidebarCollapsed ? "w-16" : "w-60"}`}>
+        <SidebarContent collapsed={sidebarCollapsed}/>
+        {/* Collapse toggle button */}
+        <button
+          onClick={() => setSidebarCollapsed(c => !c)}
+          className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-card border border-border shadow-sm flex items-center justify-center hover:bg-muted transition-colors z-10"
+        >
+          <ChevronRight className={`h-3 w-3 transition-transform ${sidebarCollapsed ? "" : "rotate-180"}`} />
+        </button>
       </aside>
 
       {/* Mobile Sidebar Overlay */}
@@ -2077,9 +2168,25 @@ export default function AdminPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <button onClick={() => setCmdOpen(true)} className="hidden sm:flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors border border-border rounded-lg px-2.5 py-1.5">
+              <Search className="h-3.5 w-3.5"/>Ara
+              <kbd className="text-xs bg-muted px-1 py-0.5 rounded border ml-1">Ctrl K</kbd>
+            </button>
             <Link href="/" target="_blank" className="hidden sm:flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors border border-border rounded-lg px-2.5 py-1.5">
-              <Globe className="h-3.5 w-3.5"/>Siteyi Gör
+              <Globe className="h-3.5 w-3.5"/>Siteyi Gor
             </Link>
+            {/* Koyu/Acik Tema Toggle */}
+            <button onClick={() => setDarkMode(d => !d)} title={darkMode ? "Acik tema" : "Koyu tema"}
+              className="w-9 h-9 rounded-xl border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors">
+              {darkMode ? <Sun className="h-4 w-4 text-amber-500" /> : <Moon className="h-4 w-4" />}
+            </button>
+            {/* Widget Panel Toggle — sadece dashboard'da */}
+            {section === "dashboard" && (
+              <button onClick={() => setWidgetPanelOpen(w => !w)} title="Widget'lari ozellestir"
+                className={`w-9 h-9 rounded-xl border border-border flex items-center justify-center transition-colors ${widgetPanelOpen ? "bg-primary text-primary-foreground" : "bg-card hover:bg-muted"}`}>
+                <SlidersHorizontal className="h-4 w-4" />
+              </button>
+            )}
             {/* Notifications */}
             <div className="relative">
               <button onClick={()=>setNotifOpen(!notifOpen)} className="relative w-9 h-9 rounded-xl border border-border bg-card flex items-center justify-center hover:bg-muted transition-colors">
@@ -2114,19 +2221,56 @@ export default function AdminPage() {
 
         {/* Content */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          {section==="dashboard"     && <DashboardSection    orders={orders} products={products} sellers={sellers} members={members} onNav={navigate}/>}
+          {section==="dashboard"     && (
+            <div className="space-y-4">
+              {/* Widget Ozellestirme Paneli */}
+              {widgetPanelOpen && (
+                <div className="bg-card border border-border rounded-2xl p-4 shadow-sm">
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <p className="text-sm font-semibold">Dashboard Widget'larini Ozellestir</p>
+                      <p className="text-xs text-muted-foreground">Gostermek istemedigin bolumu gizle</p>
+                    </div>
+                    <button onClick={() => setHiddenWidgets([])} className="text-xs text-primary hover:underline">Tümünü Goster</button>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                    {[
+                      { id: "stats",    label: "Istatistik Kartlari" },
+                      { id: "chart",    label: "Gelir Grafigi" },
+                      { id: "orders",   label: "Son Siparisler" },
+                      { id: "products", label: "Urun Durumu" },
+                      { id: "sellers",  label: "Saticilar" },
+                      { id: "hourly",   label: "Saatlik Trafik" },
+                    ].map(w => {
+                      const hidden = hiddenWidgets.includes(w.id);
+                      return (
+                        <button key={w.id}
+                          onClick={() => setHiddenWidgets(prev => hidden ? prev.filter(x => x !== w.id) : [...prev, w.id])}
+                          className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium border transition-all ${hidden ? "border-red-200 bg-red-50 text-red-600" : "border-green-200 bg-green-50 text-green-700"}`}>
+                          {hidden ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                          {w.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              <AdminLiveStats />
+              <DashboardSection orders={orders} products={products} sellers={sellers} members={members} onNav={navigate} hiddenWidgets={hiddenWidgets} />
+            </div>
+          )}
           {section==="orders"        && <OrdersSection       orders={orders}       setOrders={setOrders}/>}
-          {section==="products"      && <ProductsSection     products={products}   setProducts={setProducts}/>}
-          {section==="sellers"       && <SellersSection      sellers={sellers}     setSellers={setSellers}/>}
-          {section==="members"       && <MembersSection      members={members}     setMembers={setMembers}/>}
+          {section==="products"      && <div className="space-y-4"><ProductsSection products={products} setProducts={setProducts}/><AdminProductModeration /></div>}
+          {section==="sellers"       && <div className="space-y-4"><SellersSection sellers={sellers} setSellers={setSellers}/><AdminSellerComparison /><AdminPaymentCalendar /><AdminCommissionSim /></div>}
+          {section==="members"       && <div className="space-y-4"><MembersSection members={members} setMembers={setMembers} onOpenDetail={(m)=>{ setSelectedMember(m); setMemberDetailOpen(true); }}/><AdminCustomerLifecycle /><AdminHelpdesk /></div>}
           {section==="applications"  && <ApplicationsSection applications={applications} setApplications={setApplications}/>}
           {section==="returns"       && <ReturnsSection      refunds={refunds}     setRefunds={setRefunds}/>}
-          {section==="finance"       && <FinanceSection      payments={payments}   setPayments={setPayments}/>}
+          {section==="finance"       && <div className="space-y-4"><FinanceSection payments={payments} setPayments={setPayments}/><AdminFinanceAdvanced /><AdminPricingRules /></div>}
           {section==="coupons"       && <CouponsSection      coupons={coupons}     setCoupons={setCoupons}/>}
-          {section==="reports"       && <ReportsSection/>}
-          {section==="marketing"     && <MarketingSection/>}
-          {section==="logs"          && <LogsSection         logs={logs}/>}
-          {section==="settings"      && <SettingsSection/>}
+          {section==="reports"       && <div className="space-y-4"><ReportsSection/><AdminPredictiveSales /><AdminServiceHealth /><AdminReportExport /></div>}
+          {section==="marketing"     && <div className="space-y-4"><MarketingSection/><AdminContentManager /><AdminABTest /><AdminEmailTemplates /><AdminWeeklyEmail /><AdminWaitlist /></div>}
+          {section==="logs"          && <div className="space-y-4"><LogsSection logs={logs}/><AdminSecurityPanel /><AdminSentimentAnalysis /></div>}
+          {section==="settings"      && <div className="space-y-4"><SettingsSection/><AdminTaskManager /><AdminRoleManagement /><AdminBulkArchive /></div>}
           {section==="kanban"        && (
             <div className="space-y-4">
               <div><h2 className="text-lg font-bold tracking-tight">Kanban Sipariş Tahtası</h2><p className="text-sm text-muted-foreground mt-0.5">Siparişleri sürükleyerek durum güncelleyin</p></div>

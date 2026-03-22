@@ -592,7 +592,8 @@ export default function HomePage() {
       {/* Quick view modal */}
       {quickViewProduct && (
         <QuickViewModal
-          product={quickViewProduct as Parameters<typeof QuickViewModal>[0]["product"]}
+          product={quickViewProduct}
+          open={!!quickViewProduct}
           onClose={() => setQuickViewProduct(null)}
         />
       )}

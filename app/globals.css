@@ -169,9 +169,14 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Touch targets — minimum 44x44px for all interactive elements (WCAG 2.5.5) */
-button, a, [role="button"], input[type="submit"], input[type="button"] {
+/* Touch targets — minimum 44x44px for interactive controls (WCAG 2.5.5) */
+/* Note: <a> tags are intentionally excluded to avoid breaking inline/nav links */
+button, [role="button"], input[type="submit"], input[type="button"] {
   min-height: 44px;
+}
+
+/* Tap highlight and touch-action for all interactive elements */
+button, a, [role="button"], input[type="submit"], input[type="button"] {
   /* Disable tap highlight on mobile WebView / Pi Browser */
   -webkit-tap-highlight-color: transparent;
   /* iOS active state */
