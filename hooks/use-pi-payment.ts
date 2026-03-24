@@ -33,76 +33,122 @@ interface PaymentResult {
 export function usePiPayment() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<
+    'idle' | 'authenticating' | 'pending' | 'approving' | 'completing' | 'done' | 'cancelled' | 'error'
+  >('idle');
 
-  const initializePayment = async (paymentData: PaymentData): Promise<PaymentResult | null> => {
+  // Tamamlanmamis odeme bulunursa
+  const onIncompletePaymentFound = async (payment: PaymentResult) => {
+    try {
+      await fetch('/api/pi/complete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          paymentId: payment.identifier,
+          txid: payment.identifier,
+        }),
+      });
+    } catch (err) {
+      // Sessizce devam et
+    }
+  };
+
+  const initializePayment = async (paymentData: PaymentData): Promise<boolean> => {
     setIsLoading(true);
     setError(null);
+    setPaymentStatus('authenticating');
 
     try {
-      // Pi Network SDK kontrolü
       if (typeof window === 'undefined' || !(window as any).Pi) {
-        throw new Error('Pi Network SDK yüklenmedi');
+        throw new Error('Pi Browser gerekli. Lutfen Pi Browser ile acan.');
       }
 
       const Pi = (window as any).Pi;
 
-      // Kullanıcı kimlik doğrulama
-      await Pi.init({ 
-        version: "2.0",
-        sandbox: true // Geliştirme ortamı için
-      });
-
-      const scopes = ['payments'];
-      const authResult = await Pi.authenticate(scopes, onIncompletePaymentFound);
+      // Pi kullanici dogrulamasi
+      const authResult = await Pi.authenticate(
+        ['username', 'payments'],
+        onIncompletePaymentFound
+      );
 
       if (!authResult || !authResult.accessToken) {
-        throw new Error('Kimlik doğrulama başarısız');
+        throw new Error('Pi kimlik dogrulamasi basarisiz');
       }
 
-      // Ödeme oluştur
-      const payment = await Pi.createPayment({
-        amount: paymentData.amount,
-        memo: paymentData.memo,
-        metadata: paymentData.metadata,
-      }, {
-        onReadyForServerApproval: (paymentId: string) => {
-          console.log('[v0] Ödeme sunucu onayı için hazır:', paymentId);
-          // Buradan backend'e istek gönderilecek
-        },
-        onReadyForServerCompletion: (paymentId: string, txid: string) => {
-          console.log('[v0] Ödeme tamamlanma için hazır:', paymentId, txid);
-          // Buradan backend'e tamamlama isteği gönderilecek
-        },
-        onCancel: (paymentId: string) => {
-          console.log('[v0] Ödeme iptal edildi:', paymentId);
-          setError('Ödeme iptal edildi');
-        },
-        onError: (error: Error, payment?: any) => {
-          console.error('[v0] Ödeme hatası:', error);
-          setError(error.message);
-        },
+      setPaymentStatus('pending');
+
+      // Odeme olustur
+      await new Promise<void>((resolve, reject) => {
+        Pi.createPayment(
+          {
+            amount: paymentData.amount,
+            memo: paymentData.memo,
+            metadata: paymentData.metadata,
+          },
+          {
+            // Adim 1: Sunucu onayı
+            onReadyForServerApproval: async (paymentId: string) => {
+              setPaymentStatus('approving');
+              try {
+                const res = await fetch('/api/pi/approve', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ paymentId }),
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error || 'Onay basarisiz');
+              } catch (err: any) {
+                reject(err);
+              }
+            },
+
+            // Adim 2: Blockchain dogrulamasi sonrasi tamamlama
+            onReadyForServerCompletion: async (paymentId: string, txid: string) => {
+              setPaymentStatus('completing');
+              try {
+                const res = await fetch('/api/pi/complete', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ paymentId, txid }),
+                });
+                const data = await res.json();
+                if (!data.success) throw new Error(data.error || 'Tamamlama basarisiz');
+                setPaymentStatus('done');
+                resolve();
+              } catch (err: any) {
+                reject(err);
+              }
+            },
+
+            onCancel: (_paymentId: string) => {
+              setPaymentStatus('cancelled');
+              setError('Odeme iptal edildi');
+              resolve();
+            },
+
+            onError: (err: Error) => {
+              setPaymentStatus('error');
+              reject(err);
+            },
+          }
+        );
       });
 
       setIsLoading(false);
-      return payment;
+      return paymentStatus === 'done';
 
     } catch (err: any) {
-      console.error('[v0] Pi ödeme hatası:', err);
-      setError(err.message || 'Ödeme başlatılamadı');
+      setError(err.message || 'Odeme baslatılamadı');
+      setPaymentStatus('error');
       setIsLoading(false);
-      return null;
+      return false;
     }
-  };
-
-  const onIncompletePaymentFound = (payment: PaymentResult) => {
-    console.log('[v0] Tamamlanmamış ödeme bulundu:', payment);
-    // Tamamlanmamış ödeme işleme devam et
-    return payment.identifier;
   };
 
   return {
     initializePayment,
     isLoading,
     error,
+    paymentStatus,
   };
 }
